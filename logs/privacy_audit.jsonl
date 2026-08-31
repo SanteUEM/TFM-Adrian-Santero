@@ -1,0 +1,11 @@
+{"ts": "2026-07-26T16:08:42.947102+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:16:23.729440+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:25:52.977867+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:29:56.448331+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:32:03.906181+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:35:52.744799+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:44:53.573391+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-07-26T16:49:34.582888+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["rviz"]}
+{"ts": "2026-08-11T12:31:05.838566+00:00", "event": "UNAUTHORIZED_SUBSCRIBER", "topic": "/pedcom/camera/image_raw", "nodes": ["_ros2cli_1704"]}
+{"ts": "2026-08-11T12:31:05.970070+00:00", "event": "PERCEPTION_DISABLED", "topic": "/pedcom/camera/image_raw", "nodes": []}
+{"ts": "2026-08-11T12:31:06.112762+00:00", "event": "SAFE_STOP_REQUESTED", "topic": "/pedcom/camera/image_raw", "nodes": []}

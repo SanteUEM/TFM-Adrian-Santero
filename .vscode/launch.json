@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Depurar affect_fusion_node",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/pedcom_behaviour/pedcom_behaviour/affect_fusion_node.py",
+      "console": "integratedTerminal",
+      "env": { "PYTHONPATH": "/opt/ros/jazzy/lib/python3.12/site-packages" }
+    },
+    {
+      "name": "Depurar behaviour_manager_node",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/pedcom_behaviour/pedcom_behaviour/behaviour_manager_node.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Pytest: fichero actual",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-v"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

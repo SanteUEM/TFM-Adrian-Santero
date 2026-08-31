@@ -1,0 +1,16 @@
+# Sesion de acompanamiento de larga duracion, cancelable y con progreso.
+# Goal
+float32 max_duration_s
+float32 distress_threshold
+---
+# Result
+float32 mean_distress
+float32 peak_distress
+uint16  n_transitions
+bool    alert_raised
+string  session_id
+---
+# Feedback
+float32 current_distress
+uint8   current_state
+float32 elapsed_s

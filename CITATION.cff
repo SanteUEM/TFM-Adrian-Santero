@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+title: >-
+  Pediatric-Companion: sistema de interacción basado en IA para el
+  acompañamiento emocional y la monitorización de niños en entornos
+  hospitalarios
+message: >-
+  Si utiliza este software o se apoya en él, por favor cite el Trabajo Fin de
+  Máster asociado.
+type: software
+authors:
+  - given-names: Adrián
+    family-names: Santero Alonso
+    affiliation: Universidad Europea de Madrid
+abstract: >-
+  Sistema modular en ROS 2 que estima el estado afectivo de pacientes
+  pediátricos hospitalizados mediante visión artificial en el borde, lo funde en
+  un índice continuo de malestar y gobierna con una máquina de estados con
+  histéresis una respuesta multisensorial de acompañamiento (iluminación, audio
+  y movimiento). Incluye un análisis de la arquitectura de datos conforme al
+  RGPD, con diagrama de flujo de datos personales, evaluación de impacto
+  simplificada y medidas técnicas de privacidad desde el diseño. Validado en un
+  entorno hospitalario simulado con Gazebo Harmonic, sin emplear en ningún
+  momento imágenes reales de pacientes pediátricos.
+keywords:
+  - robótica social
+  - interacción persona-robot
+  - reconocimiento de emociones
+  - ROS 2
+  - acompañamiento pediátrico
+  - RGPD
+  - privacidad desde el diseño
+license: Apache-2.0
+repository-code: 'https://github.com/SANTEUEM/TFM-Adrian-Santero'
+references:
+  - type: thesis
+    thesis-type: Trabajo Fin de Máster
+    title: >-
+      Pediatric-Companion: desarrollo de un sistema de interacción basado en IA
+      para el acompañamiento emocional y la monitorización de niños en entornos
+      hospitalarios
+    authors:
+      - given-names: Adrián
+        family-names: Santero Alonso
+    institution:
+      name: >-
+        Universidad Europea de Madrid, Escuela de Arquitectura, Ingeniería,
+        Ciencia y Computación (STEAM)
+    year: 2026
+    month: 9

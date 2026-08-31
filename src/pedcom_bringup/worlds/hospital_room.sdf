@@ -1,0 +1,238 @@
+<?xml version="1.0" ?>
+<!--
+  Habitación pediátrica simulada (apartado 4.2, figura 5 de la memoria).
+
+  FICHERO SDF (XML) para Gazebo Harmonic. Se lanza en Ubuntu con:
+      gz sim -r /ros2_ws/src/pedcom_bringup/worlds/hospital_room.sdf
+  o desde el launch `pedcom_sim.launch.py`.
+
+  Dimensiones: 4,5 x 3,5 m. El robot se sitúa a 1,2 m del paciente, distancia
+  compatible con el espacio personal y con la resolución angular necesaria para
+  que el rostro ocupe una región suficiente de la imagen.
+
+  La luz cenital tiene intensidad parametrizable: es la variable manipulada del
+  escenario E2 de la campaña de validación (300 / 500 / 800 lux).
+-->
+<sdf version="1.9">
+  <world name="hospital_room">
+
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system"
+            name="gz::sim::systems::Imu"/>
+
+    <scene>
+      <ambient>0.55 0.55 0.58 1</ambient>
+      <background>0.85 0.87 0.90 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- ============================================== iluminación (escenario E2) -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 6 0 0 0</pose>
+      <diffuse>0.85 0.85 0.82 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.3 0.2 -0.9</direction>
+    </light>
+
+    <light type="point" name="ceiling_1">
+      <pose>-1.2 0 2.6 0 0 0</pose>
+      <diffuse>0.9 0.9 0.85 1</diffuse>
+      <attenuation><range>8</range><constant>0.4</constant><linear>0.1</linear></attenuation>
+      <cast_shadows>false</cast_shadows>
+    </light>
+    <light type="point" name="ceiling_2">
+      <pose>1.2 0 2.6 0 0 0</pose>
+      <diffuse>0.9 0.9 0.85 1</diffuse>
+      <attenuation><range>8</range><constant>0.4</constant><linear>0.1</linear></attenuation>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <!-- ==================================================== suelo y paredes -->
+    <model name="floor">
+      <static>true</static>
+      <link name="link">
+        <collision name="c">
+          <geometry><plane><normal>0 0 1</normal><size>4.5 3.5</size></plane></geometry>
+        </collision>
+        <visual name="v">
+          <geometry><plane><normal>0 0 1</normal><size>4.5 3.5</size></plane></geometry>
+          <material><ambient>0.80 0.80 0.78 1</ambient><diffuse>0.86 0.86 0.84 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="walls">
+      <static>true</static>
+      <link name="link">
+        <visual name="w_north">
+          <pose>0 1.75 1.25 0 0 0</pose>
+          <geometry><box><size>4.5 0.10 2.5</size></box></geometry>
+          <material><ambient>0.88 0.91 0.93 1</ambient><diffuse>0.92 0.95 0.96 1</diffuse></material>
+        </visual>
+        <collision name="c_north">
+          <pose>0 1.75 1.25 0 0 0</pose>
+          <geometry><box><size>4.5 0.10 2.5</size></box></geometry>
+        </collision>
+        <visual name="w_south">
+          <pose>0 -1.75 1.25 0 0 0</pose>
+          <geometry><box><size>4.5 0.10 2.5</size></box></geometry>
+          <material><ambient>0.88 0.91 0.93 1</ambient><diffuse>0.92 0.95 0.96 1</diffuse></material>
+        </visual>
+        <visual name="w_west">
+          <pose>-2.25 0 1.25 0 0 0</pose>
+          <geometry><box><size>0.10 3.5 2.5</size></box></geometry>
+          <material><ambient>0.88 0.91 0.93 1</ambient><diffuse>0.92 0.95 0.96 1</diffuse></material>
+        </visual>
+        <visual name="w_east">
+          <pose>2.25 0 1.25 0 0 0</pose>
+          <geometry><box><size>0.10 3.5 2.5</size></box></geometry>
+          <material><ambient>0.88 0.91 0.93 1</ambient><diffuse>0.92 0.95 0.96 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ==================================================== cama hospitalaria -->
+    <model name="hospital_bed">
+      <static>true</static>
+      <pose>-0.90 0 0 0 0 0</pose>
+      <link name="link">
+        <visual name="mattress">
+          <pose>0 0 0.55 0 0 0</pose>
+          <geometry><box><size>1.90 0.90 0.18</size></box></geometry>
+          <material><ambient>0.85 0.90 0.95 1</ambient><diffuse>0.90 0.94 0.98 1</diffuse></material>
+        </visual>
+        <collision name="c">
+          <pose>0 0 0.55 0 0 0</pose>
+          <geometry><box><size>1.90 0.90 0.18</size></box></geometry>
+        </collision>
+        <visual name="frame">
+          <pose>0 0 0.28 0 0 0</pose>
+          <geometry><box><size>1.95 0.95 0.36</size></box></geometry>
+          <material><ambient>0.55 0.58 0.62 1</ambient><diffuse>0.62 0.65 0.70 1</diffuse></material>
+        </visual>
+        <visual name="headboard">
+          <pose>-1.00 0 0.85 0 0 0</pose>
+          <geometry><box><size>0.06 0.90 0.55</size></box></geometry>
+          <material><ambient>0.60 0.63 0.66 1</ambient><diffuse>0.70 0.73 0.76 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===================================== plano del paciente (textura facial) -->
+    <!--
+      El rostro del paciente se representa como un plano vertical texturizado.
+
+      La textura NO es decorativa: sin ella el plano es una superficie de color
+      uniforme y ningún detector facial encuentra nada, de modo que la
+      percepción devuelve siempre `face_present = false` y la máquina de estados
+      no abandona IDLE. La simulación parecería correcta sin ejercitar la cadena
+      de percepción. Se genera con:
+
+          python3 scripts/make_face_texture.py   (admite la opción «origen»)
+
+      que además comprueba que un detector la reconoce antes de escribirla.
+
+      Alcance metodológico (apartados 2.3 y 4.3.1): la textura por defecto es un
+      rostro adulto de un conjunto público de acceso académico y cumple una
+      función puramente instrumental, la de verificar que la cadena responde
+      dentro del simulador. Las métricas de exactitud del capítulo 6 NO se
+      obtienen aquí, sino con `sequence_injector_node`, donde la etiqueta de
+      referencia de cada fotograma es conocida. No se emplea en el simulador
+      ninguna imagen de un menor identificable.
+
+      Requiere que Gazebo encuentre la carpeta de recursos:
+          export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:\
+              /ros2_ws/install/pedcom_bringup/share/pedcom_bringup/worlds
+    -->
+    <model name="patient_face_plane">
+      <static>true</static>
+      <pose>-0.55 0 1.05 0 0 0</pose>
+      <link name="link">
+        <visual name="face">
+          <!-- Cuadrado (la textura lo es) y con el lado fino en X, de modo que
+               la cara texturizada queda enfrentada al robot, situado en +X. -->
+          <geometry><box><size>0.02 0.24 0.24</size></box></geometry>
+          <material>
+            <ambient>0.85 0.85 0.85 1</ambient>
+            <diffuse>1.0 1.0 1.0 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>materials/textures/patient_face.png</albedo_map>
+                <metalness>0.0</metalness>
+                <roughness>0.9</roughness>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ======================================================= mobiliario -->
+    <model name="bedside_table">
+      <static>true</static>
+      <pose>0.60 -1.10 0 0 0 0</pose>
+      <link name="link">
+        <visual name="v">
+          <pose>0 0 0.35 0 0 0</pose>
+          <geometry><box><size>0.45 0.40 0.70</size></box></geometry>
+          <material><ambient>0.72 0.66 0.58 1</ambient><diffuse>0.80 0.74 0.66 1</diffuse></material>
+        </visual>
+        <collision name="c">
+          <pose>0 0 0.35 0 0 0</pose>
+          <geometry><box><size>0.45 0.40 0.70</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="companion_chair">
+      <static>true</static>
+      <pose>0.60 1.10 0 0 0 3.1416</pose>
+      <link name="link">
+        <visual name="seat">
+          <pose>0 0 0.45 0 0 0</pose>
+          <geometry><box><size>0.45 0.45 0.06</size></box></geometry>
+          <material><ambient>0.35 0.45 0.55 1</ambient><diffuse>0.42 0.52 0.62 1</diffuse></material>
+        </visual>
+        <visual name="back">
+          <pose>-0.20 0 0.72 0 0 0</pose>
+          <geometry><box><size>0.06 0.45 0.50</size></box></geometry>
+          <material><ambient>0.35 0.45 0.55 1</ambient><diffuse>0.42 0.52 0.62 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Mesa donde se apoya el robot, a 1,2 m del rostro del paciente -->
+    <model name="robot_table">
+      <static>true</static>
+      <pose>0.65 0 0 0 0 0</pose>
+      <link name="link">
+        <visual name="v">
+          <pose>0 0 0.45 0 0 0</pose>
+          <geometry><box><size>0.50 0.50 0.90</size></box></geometry>
+          <material><ambient>0.72 0.66 0.58 1</ambient><diffuse>0.80 0.74 0.66 1</diffuse></material>
+        </visual>
+        <collision name="c">
+          <pose>0 0 0.45 0 0 0</pose>
+          <geometry><box><size>0.50 0.50 0.90</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+  </world>
+</sdf>

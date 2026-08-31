@@ -1,0 +1,40 @@
+# Parámetros de la capa de decisión.
+affect_fusion_node:
+  ros__parameters:
+    tau_s: 1.5                  # constante del promediado exponencial
+    decay_tau_s: 3.0            # decaimiento cuando no hay rostro
+    min_confidence: 0.55        # mitigación del riesgo R1
+    stale_after_s: 2.0
+    publish_rate_hz: 20.0
+    # Pesos de D(t): [neutral, joy, sadness, anger, fear, surprise, pain]
+    weights: [0.0, -0.5, 0.6, 0.55, 0.85, 0.0, 1.0]
+
+behaviour_manager_node:
+  ros__parameters:
+    threshold_engage: 0.30
+    threshold_comfort_exit: 0.25    # histéresis de entrada/salida
+    threshold_calm: 0.60
+    threshold_calm_exit: 0.50
+    threshold_alert: 0.85
+    dwell_calm_s: 3.0
+    dwell_alert_s: 10.0
+    dwell_exit_s: 5.0
+    min_dwell_s: 2.0                # limitación de tasa de transiciones
+    watchdog_s: 1.0                 # sin datos => SAFE_STOP
+    tick_hz: 20.0
+    max_blink_hz: 3.0               # RNF-04
+    max_audio_gain: 0.6             # RNF-05
+
+privacy_guard_node:
+  ros__parameters:
+    image_topic: "/pedcom/camera/image_raw"
+    allowed_subscribers: ["perception_node", "privacy_guard_node"]
+    audit_period_s: 2.0
+    audit_log: "/ros2_ws/logs/privacy_audit.jsonl"
+    enforce: true
+
+session_logger_node:
+  ros__parameters:
+    log_dir: "/ros2_ws/logs/sessions"
+    retention_days: 30              # RGPD art. 5.1.e
+    sample_period_s: 0.5

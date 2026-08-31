@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<!--
+  Modelo del robot PedCom (apartado 4.2 de la memoria).
+
+  FICHERO XACRO (XML). Se procesa en Ubuntu con:
+      xacro /ros2_ws/src/pedcom_bringup/urdf/pedcom.urdf.xacro > /tmp/pedcom.urdf
+  o directamente desde el launch mediante Command('xacro ...').
+
+  Dos grados de libertad en el cuello (guiñada y cabeceo), cámara RGB en la
+  frente, anillo LED y altavoz. Aspecto amable y NO antropomórfico realista:
+  se evita deliberadamente el valle inquietante y la expectativa de diálogo.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pedcom">
+
+  <xacro:arg name="use_sim" default="true"/>
+
+  <!-- ================================================ propiedades del modelo -->
+  <xacro:property name="base_x"   value="0.18"/>
+  <xacro:property name="base_y"   value="0.18"/>
+  <xacro:property name="base_z"   value="0.22"/>
+  <xacro:property name="head_x"   value="0.16"/>
+  <xacro:property name="head_y"   value="0.14"/>
+  <xacro:property name="head_z"   value="0.12"/>
+  <xacro:property name="cam_fov"  value="1.0821"/>   <!-- 62 grados en radianes -->
+
+  <material name="carcasa"><color rgba="0.93 0.94 0.96 1.0"/></material>
+  <material name="acento"><color rgba="0.12 0.31 0.47 1.0"/></material>
+  <material name="oscuro"><color rgba="0.10 0.10 0.10 1.0"/></material>
+
+  <!-- macro de inercia de un prisma, para no repetir el cálculo -->
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="${m*(y*y+z*z)/12}" ixy="0.0" ixz="0.0"
+               iyy="${m*(x*x+z*z)/12}" iyz="0.0"
+               izz="${m*(x*x+y*y)/12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ============================================================== eslabones -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${base_z/2}"/>
+      <geometry><box size="${base_x} ${base_y} ${base_z}"/></geometry>
+      <material name="carcasa"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${base_z/2}"/>
+      <geometry><box size="${base_x} ${base_y} ${base_z}"/></geometry>
+    </collision>
+    <xacro:box_inertia m="1.8" x="${base_x}" y="${base_y}" z="${base_z}"/>
+  </link>
+
+  <link name="neck_yaw_link">
+    <visual>
+      <geometry><cylinder radius="0.028" length="0.05"/></geometry>
+      <material name="acento"/>
+    </visual>
+    <xacro:box_inertia m="0.12" x="0.05" y="0.05" z="0.05"/>
+  </link>
+
+  <link name="head_link">
+    <visual>
+      <origin xyz="0 0 ${head_z/2}"/>
+      <geometry><box size="${head_x} ${head_y} ${head_z}"/></geometry>
+      <material name="carcasa"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${head_z/2}"/>
+      <geometry><box size="${head_x} ${head_y} ${head_z}"/></geometry>
+    </collision>
+    <xacro:box_inertia m="0.45" x="${head_x}" y="${head_y}" z="${head_z}"/>
+  </link>
+
+  <link name="camera_link">
+    <visual>
+      <geometry><cylinder radius="0.012" length="0.012"/></geometry>
+      <material name="oscuro"/>
+    </visual>
+    <xacro:box_inertia m="0.02" x="0.02" y="0.02" z="0.02"/>
+  </link>
+
+  <!-- Marco óptico: eje Z hacia delante, convención de sensores de imagen -->
+  <link name="camera_optical_frame"/>
+  <link name="led_ring_link"/>
+  <link name="speaker_link"/>
+
+  <!-- ========================================================= articulaciones -->
+  <joint name="neck_yaw_joint" type="revolute">
+    <parent link="base_link"/>
+    <child  link="neck_yaw_link"/>
+    <origin xyz="0 0 ${base_z}"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="2.0" velocity="1.047"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+
+  <joint name="neck_pitch_joint" type="revolute">
+    <parent link="neck_yaw_link"/>
+    <child  link="head_link"/>
+    <origin xyz="0 0 0.035"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5236" upper="0.7854" effort="2.0" velocity="0.785"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="head_link"/>
+    <child  link="camera_link"/>
+    <origin xyz="${head_x/2} 0 ${head_z*0.75}" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child  link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+  </joint>
+
+  <joint name="led_ring_joint" type="fixed">
+    <parent link="head_link"/>
+    <child  link="led_ring_link"/>
+    <origin xyz="${head_x/2} 0 ${head_z*0.25}"/>
+  </joint>
+
+  <joint name="speaker_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="speaker_link"/>
+    <origin xyz="${base_x/2} 0 ${base_z*0.4}"/>
+  </joint>
+
+  <!-- ============================================================ ros2_control -->
+  <ros2_control name="PedComSystem" type="system">
+    <hardware>
+      <xacro:if value="$(arg use_sim)">
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      </xacro:if>
+      <xacro:unless value="$(arg use_sim)">
+        <plugin>mock_components/GenericSystem</plugin>
+      </xacro:unless>
+    </hardware>
+    <joint name="neck_yaw_joint">
+      <command_interface name="position">
+        <param name="min">-1.5708</param>
+        <param name="max">1.5708</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="neck_pitch_joint">
+      <command_interface name="position">
+        <param name="min">-0.5236</param>
+        <param name="max">0.7854</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- ============================================== sensores y plugins Gazebo -->
+  <gazebo reference="camera_link">
+    <sensor name="pedcom_camera" type="camera">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>30</update_rate>
+      <always_on>1</always_on>
+      <visualize>true</visualize>
+      <topic>pedcom/camera/image_raw</topic>
+      <camera>
+        <horizontal_fov>${cam_fov}</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip><near>0.10</near><far>12.0</far></clip>
+        <noise><type>gaussian</type><mean>0.0</mean><stddev>0.005</stddev></noise>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz_ros2_control-system"
+            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>/ros2_ws/install/pedcom_bringup/share/pedcom_bringup/config/ros2_control.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

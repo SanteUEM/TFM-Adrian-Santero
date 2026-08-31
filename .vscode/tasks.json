@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "colcon: build",
+      "type": "shell",
+      "command": "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install",
+      "options": { "cwd": "/ros2_ws" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "colcon: test",
+      "type": "shell",
+      "command": "source /opt/ros/jazzy/setup.bash && source install/setup.bash && colcon test && colcon test-result --verbose",
+      "options": { "cwd": "/ros2_ws" },
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "pytest: pruebas puras (sin ROS)",
+      "type": "shell",
+      "command": "python3 -m pytest src/pedcom_behaviour/test src/pedcom_perception/test -v",
+      "options": { "cwd": "/ros2_ws" },
+      "problemMatcher": []
+    },
+    {
+      "label": "ros2 launch: simulacion",
+      "type": "shell",
+      "command": "source install/setup.bash && ros2 launch pedcom_bringup pedcom_sim.launch.py rviz:=true",
+      "options": { "cwd": "/ros2_ws" },
+      "problemMatcher": []
+    }
+  ]
+}

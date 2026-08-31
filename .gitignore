@@ -1,0 +1,47 @@
+# =====================================================================
+# Pediatric-Companion — ficheros excluidos del control de versiones
+# =====================================================================
+
+# --- Artefactos de compilación de colcon / ROS 2 ---
+build/
+install/
+log/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# --- Registros de ejecución ---
+# Se versionan los resultados agregados de la campaña (logs/resultados_*)
+# y la auditoría de privacidad; no las sesiones crudas ni el archivo de
+# ejecuciones anteriores a las correcciones del 9 de agosto de 2026.
+logs/sessions/*.csv
+logs/archivo_*/
+
+# --- Grabaciones de rosbag2 ---
+bags/*/
+*.mcap
+*.db3
+
+# --- Conjuntos de datos ---
+# Las imágenes no se redistribuyen (conjunto público de terceros) y las
+# características extraídas son reproducibles. Sí se versionan los manifiestos
+# de escenario E*.txt: son la trazabilidad de qué imágenes y en qué orden se
+# reprodujeron en la campaña. Ver datasets/README.md.
+datasets/**
+!datasets/README.md
+!datasets/.gitkeep
+!datasets/E1.txt
+!datasets/E2.txt
+!datasets/E3.txt
+
+# --- Sistema operativo y editores ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~

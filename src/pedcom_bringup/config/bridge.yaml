@@ -1,0 +1,33 @@
+# Puente Gazebo <-> ROS 2 (ros_gz_bridge).
+# PRINCIPIO DE MINIMIZACIÓN: solo se puentea lo imprescindible. En particular,
+# la imagen se puentea en un ÚNICO sentido (GZ -> ROS) y no se reexpone hacia
+# Gazebo, y no se puentea ninguna cámara adicional.
+
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# `lazy: true` NO es una optimización: es un mecanismo de RNF-02. El puente
+# solo se suscribe en Gazebo cuando existe al menos un suscriptor en ROS 2. Si
+# la percepción está desactivada (y por tanto ha destruido su suscripción), no
+# hay ningún suscriptor y NINGÚN fotograma cruza a ROS 2. «Sistema desactivado»
+# deja de ser un indicador interno y pasa a ser una propiedad del grafo,
+# verificable con `ros2 topic info`.
+- ros_topic_name: "/pedcom/camera/image_raw"
+  gz_topic_name: "/pedcom/camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+  lazy: true
+
+# Gazebo publica la información de calibración en `<topic>/camera_info`, es
+# decir /pedcom/camera/image_raw/camera_info. Apuntar a /pedcom/camera/camera_info
+# creaba el tema en ROS 2 pero no llegaba jamás un mensaje.
+- ros_topic_name: "/pedcom/camera/camera_info"
+  gz_topic_name: "/pedcom/camera/image_raw/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+  lazy: true

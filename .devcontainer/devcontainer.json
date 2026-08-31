@@ -1,0 +1,38 @@
+{
+  "name": "Pediatric-Companion (ROS 2 Jazzy)",
+  "build": {
+    "dockerfile": "../docker/Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/ros2_ws",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/ros2_ws,type=bind",
+  "runArgs": [
+    "--network=bridge",
+    "--env=ROS_DOMAIN_ID=42",
+    "--env=ROS_LOCALHOST_ONLY=1",
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw"
+  ],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-iot.vscode-ros",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.analysis.extraPaths": [
+          "/opt/ros/jazzy/lib/python3.12/site-packages",
+          "/ros2_ws/install/pedcom_interfaces/lib/python3.12/site-packages"
+        ]
+      }
+    }
+  },
+  "postCreateCommand": "echo 'Contenedor listo. Compila con: colcon build --symlink-install'"
+}

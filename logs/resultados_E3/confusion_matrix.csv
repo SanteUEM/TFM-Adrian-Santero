@@ -1,0 +1,8 @@
+real\predicho,neutral,joy,sadness,anger,fear,surprise,pain
+neutral,276,37,67,58,38,36,10
+joy,19,257,9,7,6,15,2
+sadness,63,15,57,34,22,6,6
+anger,24,11,9,40,5,9,2
+fear,40,13,28,36,37,41,3
+surprise,8,2,2,8,9,70,2
+pain,39,23,52,100,14,7,74

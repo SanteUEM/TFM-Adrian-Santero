@@ -1,0 +1,7 @@
+# Abre una sesion de acompanamiento y genera un identificador aleatorio.
+bool   start                # true = iniciar, false = cerrar
+string ward                 # unidad asistencial (dato no personal)
+---
+bool   accepted
+string session_id
+string message

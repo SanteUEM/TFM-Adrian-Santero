@@ -1,0 +1,24 @@
+# Parámetros de la capa de actuación multisensorial.
+led_driver_node:
+  ros__parameters:
+    update_rate_hz: 30.0
+    transition_s: 1.0        # interpolación suave entre colores
+    max_intensity: 0.85
+    publish_marker: true     # visualización en RViz
+
+audio_player_node:
+  ros__parameters:
+    audio_dir: "/ros2_ws/src/pedcom_actuation/audio"
+    enable_playback: true
+
+head_motion_node:
+  ros__parameters:
+    rate_hz: 20.0
+    yaw_limit_deg: 90.0
+    pitch_min_deg: -30.0
+    pitch_max_deg: 45.0
+    max_speed_deg_s: 30.0    # mitad del máximo mecánico: movimiento pausado
+    fov_h_deg: 62.0
+    fov_v_deg: 48.0
+    tracking_gain: 0.35
+    joint_names: ["neck_yaw_joint", "neck_pitch_joint"]

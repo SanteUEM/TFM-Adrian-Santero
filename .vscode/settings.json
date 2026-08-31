@@ -1,0 +1,19 @@
+{
+  "python.defaultInterpreterPath": "/usr/bin/python3",
+  "python.analysis.extraPaths": [
+    "/opt/ros/jazzy/lib/python3.12/site-packages",
+    "/ros2_ws/install/pedcom_interfaces/lib/python3.12/site-packages",
+    "${workspaceFolder}/src/pedcom_perception",
+    "${workspaceFolder}/src/pedcom_behaviour",
+    "${workspaceFolder}/src/pedcom_actuation"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["src"],
+  "files.associations": {
+    "*.urdf": "xml",
+    "*.xacro": "xml",
+    "*.sdf": "xml"
+  },
+  "editor.rulers": [79],
+  "files.trimTrailingWhitespace": true
+}

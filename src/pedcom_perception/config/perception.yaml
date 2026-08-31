@@ -1,0 +1,26 @@
+# Parámetros del subsistema de percepción.
+# Se cargan con:  ros2 run pedcom_perception perception_node \
+#                   --ros-args --params-file <ruta>/perception.yaml
+perception_node:
+  ros__parameters:
+    # Cadena de percepcion: "mediapipe" (sistema final), "deepface" (linea base
+    # comparativa del apartado 6.1) o "auto". Apartado 5.3.5 de la memoria.
+    backend: "auto"
+    # Ruta al modelo de MediaPipe. Vacío => modo de reserva (OpenCV + reglas).
+    landmarker_model: "/ros2_ws/src/pedcom_perception/models/face_landmarker.task"
+    # Pesos del MLP afectivo. Vacío => clasificador basado en reglas.
+    classifier_weights: "/ros2_ws/src/pedcom_perception/models/mlp_affect.npz"
+    min_detection_confidence: 0.5
+    target_fps: 15.0                 # RF-01: >= 15 Hz
+    # Región donde se espera el rostro del paciente (u0, v0, u1, v1) en [-1,1].
+    # Descarta acompañantes situados fuera de la zona de la cama (4.3.1).
+    patient_roi: [-0.60, -0.70, 0.60, 0.70]
+    enabled_on_startup: false        # RNF-07: arranca desactivado
+
+sequence_injector_node:
+  ros__parameters:
+    dataset_dir: ""                  # vacío => secuencia sintética
+    fps: 30.0
+    loop: true
+    width: 640
+    height: 480

@@ -1,0 +1,8 @@
+real\predicho;neutral;joy;sadness;anger;fear;surprise;pain
+neutral;683;94;224;60;46;51;4
+joy;108;1427;56;33;22;37;0
+sadness;299;88;458;83;61;28;3
+anger;164;98;149;302;47;51;4
+fear;206;109;198;98;143;131;0
+surprise;73;55;22;30;44;532;0
+pain;14;9;35;26;3;2;3

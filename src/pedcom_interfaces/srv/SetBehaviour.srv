@@ -1,0 +1,8 @@
+# Control manual del sistema por parte del personal clinico (RF-07).
+uint8  requested_state      # 0 IDLE 1 ENGAGE 2 COMFORT 3 CALM_DOWN 5 SAFE_STOP
+bool   force                # true = ignorar la logica automatica
+bool   disable_perception   # true = desactivar el subsistema de percepcion
+string operator_id
+---
+bool   accepted
+string message
